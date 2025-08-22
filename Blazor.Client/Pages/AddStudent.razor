@@ -1,0 +1,52 @@
+﻿@page "/students/add"
+@inject StudentService StudentService
+@using Blazor.Domain.DTOs
+@using Blazor.Client.Services
+
+<h3>Add Student</h3>
+
+<EditForm Model="student" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <InputText class="form-control" @bind-Value="student.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label>Age</label>
+        <InputNumber class="form-control" @bind-Value="student.Age" />
+    </div>
+
+    <div class="mb-3">
+        <label>Father Name</label>
+        <InputText class="form-control" @bind-Value="student.FatherName" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Save</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info mt-3">@message</div>
+}
+
+@code {
+    private StudentCreateDto student = new();
+    private string? message;
+
+    private async Task HandleValidSubmit()
+    {
+        var result = await StudentService.CreateAsync(student);
+        if (result != null)
+        {
+            message = $"Student {result.Name} added successfully!";
+            student = new(); // Reset form
+        }
+        else
+        {
+            message = "Error adding student.";
+        }
+    }
+}

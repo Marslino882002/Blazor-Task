@@ -1,0 +1,58 @@
+﻿@page "/students"
+@inject StudentService StudentService
+@using Blazor.Client.Services
+@using Blazor.Domain.DTOs
+
+<h3>Students List</h3>
+
+<div class="mb-3">
+    <InputText placeholder="Search by name..." @bind-Value="searchTerm" class="form-control" />
+    <button class="btn btn-primary mt-2" @onclick="SearchStudents">Search</button>
+    <button class="btn btn-secondary mt-2 ms-2" @onclick="LoadStudents">Reset</button>
+</div>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Father Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (students is not null)
+        {
+            @foreach (var student in students)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                    <td>@student.Age</td>
+                    <td>@student.FatherName</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private IEnumerable<StudentDto> students = new List<StudentDto>();
+    private string searchTerm = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadStudents();
+    }
+
+    private async Task LoadStudents()
+    {
+        students = await StudentService.GetAllAsync();
+        searchTerm = string.Empty;
+    }
+
+    private async Task SearchStudents()
+    {
+        students = await StudentService.GetAllAsync(searchTerm);
+    }
+}
