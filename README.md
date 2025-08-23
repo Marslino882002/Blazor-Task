@@ -18,7 +18,6 @@ A full-stack Blazor WebAssembly project , The project uses a layered architectur
 
 ### 2. Server (Blazor.Server)
 - ASP.NET Core Web API backend.
-- Exposes endpoints for `Student` CRUD operations.
 - Handles CORS for client access.
 - Uses `Swagger` for API testing and documentation.
 
